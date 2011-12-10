@@ -1,0 +1,31 @@
+package com.Xeology.AbsoluteEconomy.Players;
+
+import com.Xeology.AbsoluteEconomy.AbsoluteEconomy;
+import com.Xeology.AbsoluteEconomy.Conf.Constants;
+import com.Xeology.AbsoluteEconomy.Conf.LoadPerms;
+import com.Xeology.AbsoluteEconomy.Conf.LoadPlayers;
+import com.Xeology.AbsoluteEconomy.Credit.Credit;
+import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerLoginEvent;
+
+
+public class LoginListener extends PlayerListener
+{
+	public static AbsoluteEconomy plugin;
+
+	public LoginListener(AbsoluteEconomy instance)
+	{
+		plugin = instance;
+	}
+
+	@Override
+	public void onPlayerLogin(PlayerLoginEvent event)
+	{
+		LoadPlayers.addPlayer(event.getPlayer().getName());
+		LoadPerms.savePerms(event.getPlayer());
+		if (!Constants.permsMap.containsKey(event.getPlayer().getName()))
+			LoadPerms.addPlayers();
+		Credit.check(event.getPlayer());
+                Taxation.savePerms(event.getPlayer());
+	}
+}
